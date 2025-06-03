@@ -23,9 +23,13 @@ You can subscribe a topic named ``/leap_hands`` including both hands position, v
 If you have installed [OpenHRC](https://github.com/Automation-Research-Team/OpenHRC) package, you can teleoperate a robot via your hand postures.
 
 
+Run the following commands in separate terminals:
 ```bash
 # start simulator of UR5e
 $ ros2 launch ur_simulation_gz ur_sim_control.launch.py initial_joint_controller:=forward_velocity_controller launch_rviz:=false
+
+# start OpenHRC for teleoperation
+$ ros2 launch ohrc_teleoperation state_topic_teleoperation.launch.py 
 
 # start control via leap motion
 $ ros2 launch ohrc_leap ohrc_leap_teleoperation.launch.py 
