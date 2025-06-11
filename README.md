@@ -28,9 +28,6 @@ Run the following commands in separate terminals:
 # start simulator of UR5e
 $ ros2 launch ur_simulation_gz ur_sim_control.launch.py initial_joint_controller:=forward_velocity_controller launch_rviz:=false
 
-# start OpenHRC for teleoperation
-$ ros2 launch ohrc_teleoperation state_topic_teleoperation.launch.py 
-
 # start control via leap motion
 $ ros2 launch ohrc_leap ohrc_leap_teleoperation.launch.py 
 ```
