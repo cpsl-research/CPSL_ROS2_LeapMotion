@@ -13,7 +13,31 @@ class LeapMotionListener(leap.Listener):
         self.callback = callback  # コールバック関数を保持
 
     def on_tracking_event(self, event):
+
+        print(f"Frame {event.tracking_frame_id} with {len(event.hands)} hands.")
+        for hand in event.hands:
+            hand_type = "left" if str(hand.type) == "HandType.Left" else "right"
+            print(
+                f"Hand id {hand.id} is a {hand_type} hand with position ({hand.palm.position.x}, {hand.palm.position.y}, {hand.palm.position.z})."
+            )
+
+            for digit_name, digit in zip(["thumb", "index", "middle", "ring", "pinky"], hand.digits):
+                print(f"  {digit_name.capitalize()}:")
+                for bone_name, bone in zip(["metacarpal", "proximal", "intermediate", "distal"], digit.bones):
+                    print(
+                        f"    {bone_name.capitalize()} joint positions: Prev ({bone.prev_joint.x}, {bone.prev_joint.y}, {bone.prev_joint.z}), Next ({bone.next_joint.x}, {bone.next_joint.y}, {bone.next_joint.z})"
+                    )
+
         self.callback(event.hands)  # 検出された手をコールバック関数に渡す
+    
+    def on_device_event(self, event):
+        try:
+            with event.device.open():
+                info = event.device.get_info()
+        except leap.LeapCannotOpenDeviceError:
+            info = event.device.get_info()
+
+        print(f"Found device {info.serial}")
 
 
 class HandsPublisher(Node):

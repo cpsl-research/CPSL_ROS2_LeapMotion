@@ -48,9 +48,9 @@ class RvizVisualizer(Node):
         HandメッセージからPoseを作成
         '''
         pose = Pose()
-        pose.position.x = hand_msg.position.x
-        pose.position.y = hand_msg.position.y
-        pose.position.z = hand_msg.position.z
+        pose.position.x = hand_msg.position.x/100
+        pose.position.y = hand_msg.position.y/100
+        pose.position.z = hand_msg.position.z/100
         pose.orientation.x = hand_msg.orientation.x
         pose.orientation.y = hand_msg.orientation.y
         pose.orientation.z = hand_msg.orientation.z
