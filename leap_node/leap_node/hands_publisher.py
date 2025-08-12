@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from leap_msgs.msg import Hands, Hand
 import leap
+import numpy as np
 
 
 class LeapMotionListener(leap.Listener):
@@ -18,15 +19,27 @@ class LeapMotionListener(leap.Listener):
         for hand in event.hands:
             hand_type = "left" if str(hand.type) == "HandType.Left" else "right"
             print(
-                f"Hand id {hand.id} is a {hand_type} hand with position ({hand.palm.position.x}, {hand.palm.position.y}, {hand.palm.position.z})."
+            f"Hand id {hand.id} is a {hand_type} hand with position ({hand.palm.position.x}, {hand.palm.position.y}, {hand.palm.position.z})."
             )
 
+            # Initialize a 20x3 numpy array to store joint positions
+            joint_positions = np.zeros((20, 3))
+            index = 0
+
             for digit_name, digit in zip(["thumb", "index", "middle", "ring", "pinky"], hand.digits):
+                
                 print(f"  {digit_name.capitalize()}:")
                 for bone_name, bone in zip(["metacarpal", "proximal", "intermediate", "distal"], digit.bones):
                     print(
-                        f"    {bone_name.capitalize()} joint positions: Prev ({bone.prev_joint.x}, {bone.prev_joint.y}, {bone.prev_joint.z}), Next ({bone.next_joint.x}, {bone.next_joint.y}, {bone.next_joint.z})"
+                    f"    {bone_name.capitalize()} joint positions: Prev ({bone.prev_joint.x}, {bone.prev_joint.y}, {bone.prev_joint.z}), Next ({bone.next_joint.x}, {bone.next_joint.y}, {bone.next_joint.z})"
                     )
+                    # Add joint positions to the numpy array
+                    joint_positions[index] = [bone.prev_joint.x, bone.prev_joint.y, bone.prev_joint.z]
+                    index += 1
+                    joint_positions[index] = [bone.next_joint.x, bone.next_joint.y, bone.next_joint.z]
+                    index += 1
+
+                print(f"Joint positions array for {hand_type} hand:\n{joint_positions}")
 
         self.callback(event.hands)  # 検出された手をコールバック関数に渡す
     
