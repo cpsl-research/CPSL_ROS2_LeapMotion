@@ -20,6 +20,7 @@ setup(
     entry_points={
         'console_scripts': [
             'hands_publisher = leap_node.hands_publisher:main',
+            'joint_publisher = leap_node.joint_publisher:main',
             'position_detector = leap_node.position_detector:main',
             'posture_detector = leap_node.posture_detector:main',
             'gesture_detector = leap_node.gesture_detector:main',
